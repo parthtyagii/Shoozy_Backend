@@ -3,28 +3,20 @@ const app = express();
 const mongoose = require('mongoose');
 const SneaksAPI = require('sneaks-api');
 const sneaks = new SneaksAPI();
+var cors = require('cors');
+const { urlencoded } = require('express');
 
 
-// app.get('/shoes', async (req, res) => {
-//     try {
-//         let shoes = [];
-//         sneaks.getProducts('Adidas', 15, function (err, products) {
-//             if (products) {
-//                 shoes = products;
-//             }
-//         })
-//         res.send(shoes);
-//     }
-//     catch (e) {
-//         console.log('cannot get shoes!');
-//         console.log(e);
-//     }
-// })
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(cors());
 
-app.get('/shoes', async (req, res) => {
+//-------------------------------------------------------------------------------
+
+app.post('/shoes', async (req, res) => {
     try {
         const products = await new Promise((resolve, reject) => {
-            sneaks.getProducts('Adidas', 15, function (err, products) {
+            sneaks.getProducts(req.body.data, 10, function (err, products) {
                 if (err) {
                     reject(err);
                 } else {
@@ -32,6 +24,8 @@ app.get('/shoes', async (req, res) => {
                 }
             });
         });
+        console.log(req.body);
+        console.log(products.length);
         res.json(products);
     } catch (e) {
         console.log('cannot get shoes!');
@@ -40,11 +34,11 @@ app.get('/shoes', async (req, res) => {
 });
 
 
-app.get('/shoesPrices', async (req, res) => {
+app.post('/shoesPrices', async (req, res) => {
     try {
         const products = await new Promise((resolve, reject) => {
 
-            sneaks.getProductPrices('Yeezy', function (err, products) {
+            sneaks.getProductPrices(req.body.data, function (err, products) {
                 if (err) {
                     reject(err);
                 }
@@ -74,7 +68,7 @@ app.get('/shoesPopular', async (req, res) => {
                 }
             });
         });
-        res.json(products.length);
+        res.json(products);
     }
     catch (e) {
         console.log('cannot get popular!');
