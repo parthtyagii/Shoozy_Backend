@@ -1,17 +1,17 @@
 const express = require('express');
 const app = express();
-const mongoose = require('mongoose');
 const SneaksAPI = require('sneaks-api');
 const sneaks = new SneaksAPI();
-var cors = require('cors');
-const { urlencoded } = require('express');
+const cors = require('cors');
 
 //-------------------------------------------------------------------------------
 
+require('dotenv').config();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors());
-require('dotenv').config();
+app.use(cors({
+    origin: "*"
+}))
 
 //-------------------------------------------------------------------------------
 
