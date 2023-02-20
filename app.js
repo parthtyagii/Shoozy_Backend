@@ -6,10 +6,12 @@ const sneaks = new SneaksAPI();
 var cors = require('cors');
 const { urlencoded } = require('express');
 
+//-------------------------------------------------------------------------------
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
+require('dotenv').config();
 
 //-------------------------------------------------------------------------------
 
@@ -24,8 +26,6 @@ app.post('/shoes', async (req, res) => {
                 }
             });
         });
-        console.log(req.body);
-        console.log(products.length);
         res.json(products);
     } catch (e) {
         console.log('cannot get shoes!');
@@ -53,7 +53,8 @@ app.post('/shoesPrices', async (req, res) => {
         console.log('cannot get prices!');
         console.log(e);
     }
-})
+});
+
 
 app.get('/shoesPopular', async (req, res) => {
     try {
@@ -74,9 +75,11 @@ app.get('/shoesPopular', async (req, res) => {
         console.log('cannot get popular!');
         console.log(e);
     }
-})
+});
 
 
-app.listen(5000, () => {
+
+let PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
     console.log('Server 5000 running!');
 })
